@@ -1,0 +1,4 @@
+boto3
+pandas
+# not imporeted directly but used by pandas
+xlwt

@@ -42,8 +42,12 @@ def download(bucket, prefix, dest):
         s3_bucket = s3_resource.Bucket(bucket)
         objects_list = get_list_of_objects_to_download(s3_bucket, prefix)
         logging.info('Downloading {} objects...'.format(len(objects_list)))
+        count = 0
         for obj in objects_list:
             download_object(s3_bucket, dest, obj)
+            count += 1
+            if count%500 == 0:
+                logging.info('Downloaded {} objects'.format(count))
     except botocore.exceptions.NoCredentialsError as no_credentials_error:
         logging.error('Failed to download. It looks like you need to configure your AWS creds')
         logging.error('Error was: {}'.format(no_credentials_error))

@@ -31,7 +31,7 @@ def download_object(s3_bucket, dest, obj):
     if os.path.exists(dest_path):
         logging.debug('{} already exists, skipping download'.format(dest_path))
         return
-    logging.info('Downloading {} to {}'.format(obj.key, dest_path))
+    logging.debug('Downloading {} to {}'.format(obj.key, dest_path))
     s3_bucket.download_file(obj.key, dest_path)
 
 

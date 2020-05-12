@@ -29,7 +29,7 @@ def aggregate_log_files_to_dataframe(input_path, output_path):
         df_list.append(pandas.read_csv(
             '{0}/{1}'.format(input_path, file),
             sep=" ",
-            names=['BucketOwner', 'Bucket', 'Time', 'TimeOffset', 'RemoteIP', 'RequesterARN/CanonicalID',
+            names=['BucketOwner', 'Bucket', 'Date', 'TimeOffset', 'RemoteIP', 'RequesterARN/CanonicalID',
                'RequestID',
                'Operation', 'Key', 'Request-URI', 'HTTPstatus', 'ErrorCode', 'BytesSent', 'ObjectSize',
                'TotalTime',
@@ -40,6 +40,7 @@ def aggregate_log_files_to_dataframe(input_path, output_path):
         engine='python'))
 
     df = pandas.concat(df_list)
+    df.sort_values(by=['Date'], inplace=True, ascending=True)
     complete_df_filename = os.path.join(output_path, 's3-accesslog-complete.xls')
     logging.info('Writing full data frame into {}'.format(complete_df_filename))
     df.to_excel(complete_df_filename, index=False)

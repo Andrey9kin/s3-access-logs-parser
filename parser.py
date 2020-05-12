@@ -101,11 +101,7 @@ def main():
 
     df = aggregate_log_files_to_dataframe(args.logs_dest, args.report_dest)
 
-    logging.info('Generate ARN-sorted reports...')
-
     arn_sorted_reports(df, args.report_dest)
-
-    logging.info('Generate GET object report...')
 
     operation_sorted_reports(df, args.report_dest)
 

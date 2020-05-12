@@ -79,6 +79,16 @@ def parse_args(args):
     return parser.parse_args()
 
 
+def operation_and_arn_sorted_reports(df, output_path):
+    logging.info('Writing reports sorted by operation and ARN...')
+    for operation_name, operation_group in df.groupby('Operation'):
+        for arn, arn_group in operation_group.groupby('RequesterARN/CanonicalID'):
+            df_filename = os.path.join(output_path, string_to_safe_filename('{}_{}'.format(operation_name, arn)))
+            trimmed_df = arn_group.drop(columns=['BucketOwner', 'RequestID'])
+            logging.info('Writing {}'.format(df_filename))
+            trimmed_df.to_excel('{}.xls'.format(df_filename), index=False)
+
+
 def main():
     args = parse_args(sys.argv[1:])
 
@@ -98,6 +108,8 @@ def main():
     logging.info('Generate GET object report...')
 
     operation_sorted_reports(df, args.report_dest)
+
+    operation_and_arn_sorted_reports(df, args.report_dest)
 
     logging.info('Done')
 
